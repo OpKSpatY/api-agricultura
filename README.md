@@ -1,6 +1,6 @@
 # API AGRICULTURA
 
-Essa é uma API voltada para a agricultura, construído utilizando Docker, Postgres, Adonis.js e Knex.js como query builder.
+Essa é uma API voltada para a agricultura, a fim de treinar meus conhecimentos com algumas tecnologias, construído utilizando Docker, Postgres, Adonis.js e Knex.js como query builder.
 
 ## Instalação
 
