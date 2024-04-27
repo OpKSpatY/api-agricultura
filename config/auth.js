@@ -2,6 +2,7 @@
 
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env')
+const ms = require('ms');
 
 module.exports = {
   /*
@@ -16,7 +17,7 @@ module.exports = {
   | Available Serializers - lucid, database
   |
   */
-  authenticator: 'session',
+  authenticator: 'jwt',
 
   /*
   |--------------------------------------------------------------------------
@@ -67,12 +68,13 @@ module.exports = {
   */
   jwt: {
     serializer: 'lucid',
-    model: 'App/Models/Producer', // Alterado para 'Producer'
+    model: 'App/Models/User',
     scheme: 'jwt',
-    uid: 'email', // Substitua isso pelo campo que identifica exclusivamente um produtor (pode ser 'id', por exemplo)
+    uid: 'email',
     password: 'hashed_password',
     options: {
-      secret: Env.get('APP_KEY')
+      secret: Env.get('APP_KEY'),
+      expiresIn: ms('5h')
     }
   },
 
