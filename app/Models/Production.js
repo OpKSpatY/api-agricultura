@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class Production extends Model {
   static get table() {
-    return 'production'
+    return 'productions'
   }
 }
 
