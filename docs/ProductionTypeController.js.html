@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>ProductionTypeController.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ContactController.html">ContactController</a><ul class='methods'><li data-type='method'><a href="module-ContactController.html#~create">create</a></li><li data-type='method'><a href="module-ContactController.html#~index">index</a></li></ul></li><li><a href="module-ProductionController.html">ProductionController</a><ul class='methods'><li data-type='method'><a href="module-ProductionController.html#~createProduction">createProduction</a></li><li data-type='method'><a href="module-ProductionController.html#~createProductionType">createProductionType</a></li><li data-type='method'><a href="module-ProductionController.html#~getMyProductionsList">getMyProductionsList</a></li><li data-type='method'><a href="module-ProductionController.html#~getProduction">getProduction</a></li><li data-type='method'><a href="module-ProductionController.html#~getProductionsList">getProductionsList</a></li><li data-type='method'><a href="module-ProductionController.html#~searchForProductionByType">searchForProductionByType</a></li><li data-type='method'><a href="module-ProductionController.html#~updateProduction">updateProduction</a></li></ul></li><li><a href="module-ProductionTypeController.html">ProductionTypeController</a><ul class='methods'><li data-type='method'><a href="module-ProductionTypeController.html#~create">create</a></li><li data-type='method'><a href="module-ProductionTypeController.html#~delete">delete</a></li><li data-type='method'><a href="module-ProductionTypeController.html#~index">index</a></li><li data-type='method'><a href="module-ProductionTypeController.html#~update">update</a></li></ul></li><li><a href="module-SwaggerController.html">SwaggerController</a><ul class='methods'><li data-type='method'><a href="module-SwaggerController.html#~getJson">getJson</a></li><li data-type='method'><a href="module-SwaggerController.html#~show">show</a></li></ul></li><li><a href="module-UserController.html">UserController</a><ul class='methods'><li data-type='method'><a href="module-UserController.html#~createUser">createUser</a></li><li data-type='method'><a href="module-UserController.html#~login">login</a></li><li data-type='method'><a href="module-UserController.html#~returnAllProducers">returnAllProducers</a></li><li data-type='method'><a href="module-UserController.html#~returnUserData">returnUserData</a></li><li data-type='method'><a href="module-UserController.html#~updateProfile">updateProfile</a></li></ul></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ProductionTypeController.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+const ProductionType = use('App/Models/ProductionType')
+const { v4: uuidv4 } = require('uuid')
+
+/**
+ * @module ProductionTypeController
+ * @description Controlador para criar, listar, atualizar e deletar tipos de produção.
+ */
+
+class ProductionTypeController {
+  /**
+   * Cria um novo tipo de produção.
+   *
+   * @function create
+   * @description Cria um novo tipo de produção.
+   * @param {Request} request - O objeto de requisição.
+   * @param {Response} response - O objeto de resposta.
+   * @param {string} request.title - O título do tipo de produção a ser criado.
+   * @returns {Object} Retorna uma mensagem de sucesso e os dados do tipo de produção criado.
+   *
+   * @throws {Error} Retorna um erro 500 se não for possível criar o tipo de produção.
+   */
+  async create({ request, response }) {
+    try {
+      const data = request.only(['title'])
+
+      const productionType = await ProductionType.create({
+        id: uuidv4(),
+        title: data.title,
+      })
+
+      return response.status(201).json({
+        message: 'Tipo de Produção criado com sucesso',
+        data: productionType,
+      })
+    } catch (error) {
+      console.error(error)
+      return response
+        .status(500)
+        .json({ message: 'Erro ao criar tipo de produção' })
+    }
+  }
+
+  /**
+   * Lista todos os tipos de produção.
+   *
+   * @function index
+   * @description Lista todos os tipos de produção.
+   * @param {Response} response - O objeto de resposta.
+   * @returns {Object} Retorna os tipos de produção.
+   *
+   * @throws {Error} Retorna um erro 500 se não for possível obter os tipos de produção.
+   */
+  async index({ response }) {
+    try {
+      const productionTypes = await ProductionType.all()
+
+      return response.status(200).json({ data: productionTypes })
+    } catch (error) {
+      console.error(error)
+      return response
+        .status(500)
+        .json({ message: 'Erro ao obter os tipos de produção' })
+    }
+  }
+
+  /**
+   * Atualiza um tipo de produção existente.
+   *
+   * @function update
+   * @description Atualiza um tipo de produção existente.
+   * @param {Request} request - O objeto de requisição.
+   * @param {Response} response - O objeto de resposta.
+   * @param {object} params
+   * @param {string} params.id - O ID do tipo de produção a ser atualizado.
+   * @param {string} request.title - O título do tipo de produção a ser atualizado.
+   * @returns {Object} Retorna uma mensagem de sucesso.
+   *
+   * @throws {Error} Retorna um erro 404 se o tipo de produção não for encontrado.
+   * @throws {Error} Retorna um erro 500 se não for possível atualizar o tipo de produção.
+   */
+  async update({ request, response, params }) {
+    const { id } = params
+
+    try {
+      const data = request.only(['title'])
+
+      const productionType = await ProductionType.find(id)
+
+      if (!productionType) {
+        return response
+          .status(404)
+          .json({ message: 'Tipo de produção não encontrado' })
+      }
+
+      productionType.merge(data)
+      await productionType.save()
+
+      return response
+        .status(200)
+        .json({ message: 'Tipo de produção atualizado com sucesso' })
+    } catch (error) {
+      console.error(error)
+      return response
+        .status(500)
+        .json({ message: 'Erro ao atualizar tipo de produção' })
+    }
+  }
+
+  /**
+   * Deleta um tipo de produção existente.
+   *
+   * @function delete
+   * @description Deleta um tipo de produção existente.
+   * @param {Params} params - O parâmetro da requisição.
+   * @param {Response} response - O objeto de resposta.
+   * @param {object} params
+   * @param {string} params.id - O ID do tipo de produção a ser deletado.
+   * @returns {Object} Retorna uma mensagem de sucesso.
+   *
+   * @throws {Error} Retorna um erro 404 se o tipo de produção não for encontrado.
+   * @throws {Error} Retorna um erro 500 se não for possível deletar o tipo de produção.
+   */
+  async delete({ response, params }) {
+    const { id } = params
+
+    try {
+      const productionType = await ProductionType.find(id)
+
+      if (!productionType) {
+        return response
+          .status(404)
+          .json({ message: 'Tipo de produção não encontrado' })
+      }
+
+      await productionType.delete()
+
+      return response
+        .status(200)
+        .json({ message: 'Tipo de produção deletado com sucesso' })
+    } catch (error) {
+      console.error(error)
+      return response
+        .status(500)
+        .json({ message: 'Erro ao deletar tipo de produção' })
+    }
+  }
+}
+
+module.exports = ProductionTypeController
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Sat Apr 27 2024 19:09:21 GMT-0300 (Horário Padrão de Brasília) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+
+</body>
+</html>

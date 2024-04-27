@@ -33,6 +33,7 @@
     "@adonisjs/validator": "^5.1.0",
     "adonis-swagger": "^1.2.9",
     "dayjs": "^1.11.10",
+    "docdash": "^2.0.2",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.0.1",
     "pg": "^8.11.3",

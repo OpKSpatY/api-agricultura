@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>ContactController.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ContactController.html">ContactController</a><ul class='methods'><li data-type='method'><a href="module-ContactController.html#~create">create</a></li><li data-type='method'><a href="module-ContactController.html#~index">index</a></li></ul></li><li><a href="module-ProductionController.html">ProductionController</a><ul class='methods'><li data-type='method'><a href="module-ProductionController.html#~createProduction">createProduction</a></li><li data-type='method'><a href="module-ProductionController.html#~createProductionType">createProductionType</a></li><li data-type='method'><a href="module-ProductionController.html#~getMyProductionsList">getMyProductionsList</a></li><li data-type='method'><a href="module-ProductionController.html#~getProduction">getProduction</a></li><li data-type='method'><a href="module-ProductionController.html#~getProductionsList">getProductionsList</a></li><li data-type='method'><a href="module-ProductionController.html#~searchForProductionByType">searchForProductionByType</a></li><li data-type='method'><a href="module-ProductionController.html#~updateProduction">updateProduction</a></li></ul></li><li><a href="module-ProductionTypeController.html">ProductionTypeController</a><ul class='methods'><li data-type='method'><a href="module-ProductionTypeController.html#~create">create</a></li><li data-type='method'><a href="module-ProductionTypeController.html#~delete">delete</a></li><li data-type='method'><a href="module-ProductionTypeController.html#~index">index</a></li><li data-type='method'><a href="module-ProductionTypeController.html#~update">update</a></li></ul></li><li><a href="module-SwaggerController.html">SwaggerController</a><ul class='methods'><li data-type='method'><a href="module-SwaggerController.html#~getJson">getJson</a></li><li data-type='method'><a href="module-SwaggerController.html#~show">show</a></li></ul></li><li><a href="module-UserController.html">UserController</a><ul class='methods'><li data-type='method'><a href="module-UserController.html#~createUser">createUser</a></li><li data-type='method'><a href="module-UserController.html#~login">login</a></li><li data-type='method'><a href="module-UserController.html#~returnAllProducers">returnAllProducers</a></li><li data-type='method'><a href="module-UserController.html#~returnUserData">returnUserData</a></li><li data-type='method'><a href="module-UserController.html#~updateProfile">updateProfile</a></li></ul></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ContactController.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+const { v4: uuidv4 } = require('uuid')
+const Contact = use('App/Models/Contact')
+const validationMessagesModule = require('../../Validators/ValidationMessages')
+const { validate } = use('Validator')
+
+/**
+ * @module ContactController
+ *
+ * @description Controlador responsável por lidar com as solicitações de contato.
+ */
+
+class ContactController {
+  /**
+   * Cria uma nova solicitação de contato.
+   *
+   * @function create
+   * @description Cria uma nova solicitação de contato.
+   * @param {Request} request - O objeto de requisição.
+   * @param {Response} response - O objeto de resposta.
+   * @param {string} request.body.name - O nome do solicitante.
+   * @param {string} request.body.cell_number - O número de telefone do solicitante.
+   * @param {string} request.body.email - O email do solicitante.
+   * @param {string} request.body.message - A mensagem da solicitação de contato.
+   * @returns {Object} Retorna o ID da solicitação de contato criada.
+   *
+   * @throws {Error} Retorna um erro 400 se houver falha na validação dos dados.
+   * @throws {Error} Retorna um erro 500 se o número de telefone fornecido for inválido.
+   * @throws {Error} Retorna um erro 500 se não for possível criar a solicitação de contato.
+   */
+  async create({ request, response }) {
+    try {
+      const { name, cell_number, email, message } = request.only([
+        'name',
+        'cell_number',
+        'email',
+        'message',
+      ])
+
+      const validationRules = {
+        name: 'required|string|max:80',
+        cell_number: 'required|string',
+        email: 'required|email',
+        message: 'required|string',
+      }
+
+      const validationMessages = {
+        'name.required': validationMessagesModule.required('name'),
+        'name.string': validationMessagesModule.string('name'),
+        'email.required': validationMessagesModule.required('email'),
+        'email.email': validationMessagesModule.email('email'),
+        'cell_number.required':
+          validationMessagesModule.required('cell_number'),
+        'cell_number.string': validationMessagesModule.string('number'),
+        'message.required': validationMessagesModule.required('message'),
+        'message.string': validationMessagesModule.string('message'),
+      }
+
+      const validation = await validate(
+        request.all(),
+        validationRules,
+        validationMessages
+      )
+
+      if (validation.fails()) {
+        return response.status(400).send({ message: validation.messages() })
+      }
+
+      if (cell_number.length &lt; 11 || cell_number.length > 11) {
+        return response.status(500).json({
+          message: 'O número de telefone fornecido é inválido.',
+        })
+      }
+
+      const contactRequest = await Contact.create({
+        id: uuidv4(),
+        name: name,
+        phone_number: Number(cell_number),
+        email: email,
+        message: message,
+      })
+
+      return response.status(201).send({
+        contact_request_id: contactRequest.id,
+      })
+    } catch (error) {
+      console.error(error)
+      return response
+        .status(500)
+        .json({ message: 'Erro ao criar solicitação de contato' })
+    }
+  }
+  /**
+   * Retorna todas as solicitações de contato.
+   *
+   * @function index
+   * @description Retorna todas as solicitações de contato.
+   * @param {Request} request - O objeto de requisição.
+   * @param {Response} response - O objeto de resposta.
+   * @returns {Object} Retorna um array com todas as solicitações de contato.
+   *
+   * @throws {Error} Retorna um erro 500 se não for possível obter as solicitações de contato.
+   */
+  async index({ response }) {
+    try {
+      const contacts = await Contact.all()
+
+      return response.status(200).send(contacts)
+    } catch (error) {
+      console.error(error)
+      return response
+        .status(500)
+        .json({ message: 'Erro ao obter as solicitações de contato' })
+    }
+  }
+}
+
+module.exports = ContactController
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Sat Apr 27 2024 19:09:21 GMT-0300 (Horário Padrão de Brasília) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+
+</body>
+</html>
