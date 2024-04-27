@@ -1,4 +1,4 @@
-const { validate, rule } = use("Validator");
+const { validate, rule } = use('Validator')
 
 class Validations {
   /**
@@ -10,28 +10,28 @@ class Validations {
     const rules = {
       id: [
         rule(
-          "regex",
+          'regex',
           new RegExp(
             /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
           )
         ),
-        rule("required"),
+        rule('required'),
       ],
-    };
+    }
 
     try {
       const validation = await validate(id, rules, {
-        "id.required": `${fieldName} é obrigatório`,
-        "id.regex": `${fieldName} inválido`,
-      });
+        'id.required': `${fieldName} é obrigatório`,
+        'id.regex': `${fieldName} inválido`,
+      })
 
-      if (validation.fails()) throw validation.messages();
+      if (validation.fails()) throw validation.messages()
 
-      return { validate: true };
+      return { validate: true }
     } catch (error) {
-      return { error, validate: false };
+      return { error, validate: false }
     }
   }
 }
 
-module.exports = Validations;
+module.exports = Validations

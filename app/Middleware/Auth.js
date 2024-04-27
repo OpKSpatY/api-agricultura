@@ -10,23 +10,23 @@ class Auth {
    * @param {Function} next
    */
   async handle({ request, response, auth }, next) {
-    const token = request.header('Authorization');
+    const token = request.header('Authorization')
 
     if (!token) {
-      return response.status(401).json({ error: 'Token não fornecido' });
+      return response.status(401).json({ error: 'Token não fornecido' })
     }
 
     try {
       // Verifique o token usando a mesma lógica usada para assiná-lo
-      const decoded = jwt.verify(token, Env.get('APP_KEY'));
+      const decoded = jwt.verify(token, Env.get('APP_KEY'))
 
       // Atribua o usuário autenticado ao contexto
-      auth.user = decoded;
+      auth.user = decoded
 
       // Continue com a próxima etapa da solicitação
-      await next();
+      await next()
     } catch (error) {
-      return response.status(401).json({ error: 'Token inválido' });
+      return response.status(401).json({ error: 'Token inválido' })
     }
   }
 }

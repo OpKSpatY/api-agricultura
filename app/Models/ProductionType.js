@@ -6,7 +6,7 @@ const Model = use('Model')
 class ProductionType extends Model {
   static get table() {
     return 'production_types'
-}
+  }
 }
 
 module.exports = ProductionType

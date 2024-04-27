@@ -4,9 +4,9 @@
 const Model = use('Model')
 
 class Producer extends Model {
-    static get table() {
-        return 'producer'
-    }
+  static get table() {
+    return 'producer'
+  }
 }
 
 module.exports = Producer

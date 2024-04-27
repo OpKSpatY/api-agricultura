@@ -6,7 +6,7 @@ const Model = use('Model')
 class Contact extends Model {
   static get table() {
     return 'contact_request'
-}
+  }
 }
 
 module.exports = Contact
