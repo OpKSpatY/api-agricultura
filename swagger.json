@@ -240,12 +240,6 @@
                 "description": {
                   "type": "string"
                 },
-                "bee_type": {
-                  "type": "string"
-                },
-                "hive_quantity": {
-                  "type": "number"
-                },
                 "notes": {
                   "type": "string"
                 },
@@ -264,9 +258,6 @@
                   "format": "date"
                 },
                 "production_type_id": {
-                  "type": "string"
-                },
-                "bee_type_id": {
                   "type": "string"
                 }
               }
@@ -351,12 +342,6 @@
                 "description": {
                   "type": "string"
                 },
-                "bee_type": {
-                  "type": "string"
-                },
-                "hive_quantity": {
-                  "type": "number"
-                },
                 "notes": {
                   "type": "string"
                 },
@@ -378,9 +363,6 @@
                   "format": "date"
                 },
                 "production_type_id": {
-                  "type": "string"
-                },
-                "bee_type_id": {
                   "type": "string"
                 }
               }

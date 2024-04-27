@@ -454,7 +454,7 @@ class ProductionController {
       const production_type = await ProductionType.findBy('title', title)
 
       const productions = await Production.query()
-        .select('id', 'nickname', 'bee_type')
+        .select('id', 'nickname')
         .where('producer_id', user_id)
         .where('production_type_id', production_type.id)
         .fetch()
