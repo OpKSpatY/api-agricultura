@@ -1,3 +1,6 @@
+const { Ignitor } = require('@adonisjs/ignitor');
+const path = require('path');
+
 'use strict'
 
 /** @type {import('@adonisjs/framework/src/Server')} */
@@ -16,8 +19,7 @@ const globalMiddleware = [
   'Adonis/Middleware/BodyParser',
   'Adonis/Middleware/Session',
   'Adonis/Middleware/Shield',
-  'Adonis/Middleware/AuthInit',
-  'App/Middleware/ConvertEmptyStringsToNull',
+  'Adonis/Middleware/AuthInit'
 ]
 
 /*
@@ -38,6 +40,7 @@ const globalMiddleware = [
 |
 */
 const namedMiddleware = {
+  auth: 'Adonis/Middleware/Auth',
   tokenEquality: 'App/Middleware/TokenEquality',
 }
 

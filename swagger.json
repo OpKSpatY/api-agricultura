@@ -1,0 +1,616 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API Agricultura",
+    "description": "Rotas documentadas da API da agricultura",
+    "version": "1.0.0"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "tags": [
+    {
+      "name": "users",
+      "description": "Operações relacionadas aos usuários"
+    },
+    {
+      "name": "productions",
+      "description": "Operações relacionadas às produções"
+    },
+    {
+      "name": "production-types",
+      "description": "Operações relacionadas aos tipos de produção"
+    },
+    {
+      "name": "contact",
+      "description": "Operações relacionadas a solicitações de contato"
+    }
+  ],
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "JWT Authorization token"
+    }
+  },
+  "paths": {
+    "/register": {
+      "post": {
+        "summary": "Cria um novo usuário",
+        "tags": ["users"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Objeto contendo os dados do usuário",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "cpf": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "confirm_password": {
+                  "type": "string"
+                },
+                "phonenumber": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Operação bem sucedida"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Faz login de um usuário",
+        "tags": ["users"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Objeto contendo os dados de login do usuário",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação bem sucedida"
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/user-data/{user_id}": {
+      "get": {
+        "summary": "Retorna os dados de um usuário",
+        "tags": ["users"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação bem sucedida"
+          },
+          "400": {
+            "description": "Usuário não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "getUserData",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Atualiza os dados de um usuário",
+        "tags": ["users"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Objeto contendo os dados a serem atualizados do usuário",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "cpf": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "confirm_password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação bem sucedida"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "updateUserData",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/production/create/{user_id}": {
+      "post": {
+        "summary": "Cria uma nova produção",
+        "tags": ["productions"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados da produção",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "bee_type": {
+                  "type": "string"
+                },
+                "hive_quantity": {
+                  "type": "number"
+                },
+                "notes": {
+                  "type": "string"
+                },
+                "latitude": {
+                  "type": "number"
+                },
+                "longitude": {
+                  "type": "number"
+                },
+                "start_date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "end_date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "production_type_id": {
+                  "type": "string"
+                },
+                "bee_type_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Produção criada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "createProduction",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/production/{production_id}": {
+      "get": {
+        "summary": "Obtém os detalhes de uma produção",
+        "tags": ["productions"],
+        "parameters": [
+          {
+            "name": "production_id",
+            "in": "path",
+            "description": "ID da produção",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação bem sucedida"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "404": {
+            "description": "Produção não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "getProduction",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Atualiza uma produção",
+        "tags": ["productions"],
+        "parameters": [
+          {
+            "name": "production_id",
+            "in": "path",
+            "description": "ID da produção",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados atualizados da produção",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nickname": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "bee_type": {
+                  "type": "string"
+                },
+                "hive_quantity": {
+                  "type": "number"
+                },
+                "notes": {
+                  "type": "string"
+                },
+                "latitude": {
+                  "type": "number"
+                },
+                "longitude": {
+                  "type": "number"
+                },
+                "producer_id": {
+                  "type": "string"
+                },
+                "start_date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "end_date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "production_type_id": {
+                  "type": "string"
+                },
+                "bee_type_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produção atualizada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "404": {
+            "description": "Produção não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "updateProduction",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/productions": {
+      "get": {
+        "summary": "Obtém uma lista de produções",
+        "tags": ["productions"],
+        "responses": {
+          "200": {
+            "description": "Operação bem sucedida"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "getProductionsList",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/productions/{user_id}": {
+      "get": {
+        "summary": "Obtém uma lista das produções de um usuário",
+        "tags": ["productions"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação bem sucedida"
+          },
+          "204": {
+            "description": "Nenhuma produção encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "getMyProductionsList",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/productions/type/{production_type_value}": {
+      "get": {
+        "summary": "Busca produções por tipo",
+        "tags": ["productions"],
+        "parameters": [
+          {
+            "name": "production_type_value",
+            "in": "path",
+            "description": "Valor do tipo de produção",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação bem sucedida"
+          },
+          "204": {
+            "description": "Nenhuma produção encontrada"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "404": {
+            "description": "Tipo de produção não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "searchForProductionByType",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/production-types": {
+      "post": {
+        "summary": "Cria um novo tipo de produção",
+        "tags": ["production-types"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do tipo de produção",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Tipo de produção criado com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "createProductionType",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "summary": "Obtêm os tipos de produção",
+        "tags": ["production-types"],
+        "responses": {
+          "200": {
+            "description": "Operação bem sucedida"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "getProductionTypes",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/contact/request": {
+      "post": {
+        "summary": "Cria uma nova solicitação de contato",
+        "tags": ["contact"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados da solicitação de contato",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "cell_number": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Solicitação de contato criada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "operationId": "createContactRequest",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  }
+}
